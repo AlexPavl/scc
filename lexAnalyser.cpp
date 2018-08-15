@@ -3,11 +3,11 @@
 #include <iostream>
 #include <set>
 
-
-bool isSetContains(std::set<std::string> &Set, 
-                    std::string &str)
+template <class Type>
+bool isSetContains(std::set<Type> &Set, 
+                    Type &obj)
 {
-    if (Set.count(str)) {
+    if (Set.count(obj)) {
         return true;
     }
     else {
@@ -37,26 +37,22 @@ std::set<std::string> keywords = {
     "unsigned", "void", "volatile", "while"
 };
 /* small operators' table */
-std::set<std::string> operators = {
-    "=", "+", "-", "*", "/"
+std::set<char> operators = {
+    '=', '+', '-', '*', '/', '(', ')', ';', ',', '{', '}'
 };
 
 std::vector<Symbol_Info> symbTable;
 
 unsigned lexicAnalyser(std::istream &in)
 {
-    std::string input;
+    std::string input = "";
+    char inC;
+    bool startedWord = false;
     while(!in.eof()) {
-        in >> input;
-        if (isSetContains(keywords, input)) {
-            std::cout << "keyword " << input << '\n';
-        }
-        else if (isSetContains(operators, input)) {
-            std::cout << "operator " << input << '\n';
-        }
-        else {
-            std::cout << "something other " << input << '\n';
-        }
+        inC = in.get();
+        if (isSetContains(operators, inC)) {
+            std::cout << "Divider: " << inC << std::endl;
+        }        
     }
 }
 
