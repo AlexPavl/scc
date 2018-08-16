@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "error.hpp"
-#include "lexAnalyzer.hpp"
+#include "lexAnalyser.hpp"
 
 
 int main(int argc, char **argv)
