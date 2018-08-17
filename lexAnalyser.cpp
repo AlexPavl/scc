@@ -51,6 +51,25 @@ enum class ELEM_TYPE {
     NUM /* number */
 };
 
+static void result(std::string& input, 
+                    ELEM_TYPE   type) 
+{
+    switch (type) {
+        case ELEM_TYPE::NUM :
+            /* define which type of number */
+            break;
+        case ELEM_TYPE::VAR :
+            /* save in symbols table  */
+            break;
+        case ELEM_TYPE::OPER :
+            /* for now dont know */
+            break;
+        default:
+            std::cerr << "Unknown type" << std::endl;
+            /* something wrong */
+    }
+}
+
 static void analyse(char ch)
 {
     static std::string temp = "";
@@ -72,10 +91,22 @@ static void analyse(char ch)
 
     }
     else if (ELEM_TYPE::VAR == curType) {
-
+        if ((ch >= 'A' && ch <= 'Z') || /*[A...Z]*/
+            (ch >= 'a' && ch <= 'z') ||   /* [a...z] */
+            ch == '_' || /* [_] */
+            (ch >= '0' && ch <= '9'))  {
+            temp += ch;
+        }
+        else if (ch == ' ') {
+            result(temp, curType);
+        }
     }
     else if (ELEM_TYPE::NUM == curType) {
-
+        if ((ch >= 'A' && ch <= 'Z') || /*[A...Z]*/
+            (ch >= 'a' && ch <= 'z') ||   /* [a...z] */
+            ch == '_')  {/* [_] */
+            compError("Variable started with numbers");
+        }
     }
 }
 
