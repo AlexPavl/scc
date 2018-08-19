@@ -40,7 +40,7 @@ std::set<std::string> keywords = {
 };
 /* small operators' table */
 std::set<char> operators = {
-    '=', '+', '-', '*', '/', '(', ')', ';', ',', '{', '}', '"', '\''
+    '=', '+', '-', '*', '/', '(', ')', ';', ',', '{', '}', '"', '\'', '<', '>'
 };
 
 std::vector<Symbol_Info> symbTable;
@@ -61,6 +61,7 @@ enum class ELEM_TYPE {
 static void result(std::string& input, 
                     ELEM_TYPE   type) 
 {
+    if (input != "" || input != " " || input != "\n")
     switch (type) {
         case ELEM_TYPE::NUM :
         {
@@ -102,7 +103,7 @@ static void analyse(char ch)
             temp += ch;
             curType = ELEM_TYPE::NUM;
         }
-        else if (ch == ' ') {
+        else if (ch == ' ' || '\n' == ch) {
             return;
         }
         else if (isSetContains(operators, ch)) {
@@ -126,8 +127,8 @@ static void analyse(char ch)
                 temp += ch;
                 tableOp.push_back(temp);
                 temp = "";
-                curType = ELEM_TYPE::NONE;
             }
+            curType = ELEM_TYPE::NONE;
         }
     }
     else if (ELEM_TYPE::NUM == curType) {
@@ -158,21 +159,21 @@ unsigned lexicAnalyser(std::istream &in)
         inC = in.get();
         analyse(inC);     
     }
-    std::cout << "Keywords:\n";
+    std::cout << "*******************Keywords:\n";
     for (auto x : tableKeyW) {
-        std::cout << x << '\n';
+        std::cout << "-" <<x << '\n';
     }
-    std::cout << "operators:\n";
+    std::cout << "*******************operators:\n";
     for (auto x : tableOp) {
-        std::cout << x << '\n';
+        std::cout << "-" << x << '\n';
     }
-    std::cout << "Variables:\n";
+    std::cout << "*******************Variables:\n";
     for (auto x : tableVar) {
-        std::cout << x << '\n';
+        std::cout << "-" << x << '\n';
     }
-    std::cout << "Numbers:\n";
+    std::cout << "*******************Numbers:\n";
     for(auto x : tableNum) {
-        std::cout << x << '\n';
+        std::cout << "-" << x << '\n';
     }
 }
 
