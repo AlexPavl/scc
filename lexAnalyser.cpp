@@ -119,6 +119,7 @@ static void analyse(char ch)
             ch == '_' || /* [_] */
             (ch >= '0' && ch <= '9'))  {
             temp += ch;
+            
         }
         else if (isSetContains(operators, ch) || ' ' == ch || '\n' == ch) {
             result(temp, curType);
@@ -136,6 +137,9 @@ static void analyse(char ch)
             (ch >= 'a' && ch <= 'z') ||   /* [a...z] */
             ch == '_')  {/* [_] */
             compError("Variable started with numbers");
+        }
+        else if ((ch >= '0' && ch <= '9') || ch == '.') {
+            temp += ch;
         }
         else if (isSetContains(operators, ch) || ' ' == ch || '\n' == ch) {
             result(temp, curType);
