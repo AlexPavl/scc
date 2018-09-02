@@ -5,6 +5,24 @@
 #include "error.hpp"
 #include <cmath>
 
+struct FilePos {
+    std::string     fileName;
+    unsigned int    line;
+};
+
+
+
+class Lexem {
+private:
+    unsigned type;   /* token type  */
+    ;     /* symbol's table number */
+    FilePos begin;
+    FilePos end;
+
+public:
+    Lexem(unsigned type, FilePos fp) : type(type), begin(fp)  {}
+};
+
 template <class Type>
 bool isSetContains(std::set<Type> &Set, 
                     Type &obj)
@@ -16,17 +34,6 @@ bool isSetContains(std::set<Type> &Set,
         return false;
     }
 }
-
-struct Token {
-    std::string type;   /* token type  */
-    unsigned    id;     /* symbol's table number */
-};
-
-struct Symbol_Info {
-    std::string name;       /* name of object */
-    unsigned    type;
-    unsigned    initLine;   /* which line init */
-};
 /* need full keywords' table */
 std::set<std::string> keywords = {
     "auto", "break", "case", "char",
@@ -42,8 +49,6 @@ std::set<std::string> keywords = {
 std::set<char> operators = {
     '=', '+', '-', '*', '/', '(', ')', ';', ',', '{', '}', '"', '\'', '<', '>'
 };
-
-std::vector<Symbol_Info> symbTable;
 
 std::vector<double> tableNum;
 std::vector<std::string> tableVar;

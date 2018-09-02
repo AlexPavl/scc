@@ -3,6 +3,14 @@
 #include <iostream>
 
 
+
+struct Symbol_Info {
+    std::string name;       /* name of object */
+    unsigned    type;
+    unsigned    initLine;   /* which line init */
+};
+
+
 unsigned lexicAnalyser(std::istream &in);
 
 
