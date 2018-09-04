@@ -4,24 +4,56 @@
 #include <set>
 #include "error.hpp"
 #include <cmath>
+#include <map>
 
 struct FilePos {
     std::string     fileName;
     unsigned int    line;
 };
 
-
-
 class Lexem {
 private:
     unsigned type;   /* token type  */
-    ;     /* symbol's table number */
-    FilePos begin;
-    FilePos end;
+    std::string name;   
 
 public:
-    Lexem(unsigned type, FilePos fp) : type(type), begin(fp)  {}
+    Lexem(unsigned type, std::string name) : type(type), name(name)  {}
+    Lexem(Lexem &lex) : type(lex.type), name(lex.name) {}
 };
+/* this type of IdTables does't support static
+ elements of stack, without saving in heap */
+class IdTable {
+private:
+    /* Global table will have nullptr as prevTable */
+    IdTable*    prevTable;
+    std::map<std::string, Lexem> tbl; /* ok, map is not an option */
+    static IdTable* curTable;
+public:
+    IdTable(void) {
+        prevTable = curTable; /* like table's stack */
+        curTable = this; /* new table became active */
+    }
+    ~IdTable(void) {
+        /* while destroing previous active table became active again */
+        curTable = prevTable; 
+    }
+    /* i think the type will contain data type (int, double and other) */
+    void Add(std::string name, unsigned int type) {
+        /* todo: in case if we already have the same object */
+        tbl.emplace(std::make_pair(name, Lexem(type, name)));
+        /* todo: come up with something better*/
+    }
+    Lexem*  getByName(std::string name) {
+        auto tmp = tbl.find(name);
+        Lexem* res = nullptr;
+        if (tbl.end() != tmp) {
+            res = &tmp->second; /* todo : need better architecture */
+        }
+        return res;
+    }
+};
+
+
 
 template <class Type>
 bool isSetContains(std::set<Type> &Set, 
